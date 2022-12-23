@@ -39,15 +39,15 @@
         </div>
       </div>
 
-      <div class="col-lg-9" id="productsid">
+      <div class="col-lg-9" id="">
 
-        <div class="row">
+        <div class="row" id="productsid">
 
           <% for(var i=0;i<products.results.length;i++){ %>
           <div class="col-lg-4 col-md-6 col-sm-6">
             <div class="product__item">
               <div class="product__item__pic set-bg" data-setbg=""><a href="/productsdetails/<%=products.results[i]._id  %>  ">
-                  <img src="/Images<%=products.results[i].Image[0].filename %> " width="400px" height="250px" alt="">
+                  <img src="/Images<%=products.results[i].Image[0].filename %> " style="height: 250px;" alt="">
                 </a>
               </div>
               <div class="product__item__text">

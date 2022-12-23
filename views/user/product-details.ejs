@@ -35,7 +35,7 @@ figure.zoom img {
                         <% for (var i=0;i<productDetails.Image.length;i++){ %> 
                         <li class="nav-item">
                             <a class="nav-link active" onclick="getImage('/Images<%=productDetails.Image[i].filename%>')">
-                                <img src="/Images<%=productDetails.Image[i].filename%>" alt="">
+                                <img  src="/Images<%=productDetails.Image[i].filename%>" style="height: 120px;" alt="">
                                 
                             </a>    
                         </li>
@@ -47,9 +47,9 @@ figure.zoom img {
                 <div class="col-lg-6 col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                            <div class="product__details__pic__item">
-                                <figure class="zoom" onmousemove="zoom(event)" id="zoommmm" style="background-image:url(/Images<%=productDetails.Image[0].filename%>)">
-                                <img id="imageid" src="/Images<%=productDetails.Image[0].filename%>" width="400px" height="500px" alt="">
+                            <div class="product__details__pic__item align-middle">
+                                <figure class="zoom" onmousemove="zoom(event)" id="zoommmm" style="background-image:url(/Images<%=productDetails.Image[0].filename%>);width:300px;">
+                                <img id="imageid" src="/Images<%=productDetails.Image[0].filename%>" style="width:300px;" alt="">
                             </figure>
                             </div>
                         </div>
