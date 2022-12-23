@@ -1,0 +1,254 @@
+<%- include ('layout/header.ejs') %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<style>
+  .modal-dialog-right-side {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: -ms-flexbox;
+    display: flex;
+
+
+    margin: 0 !important
+  }
+
+  /* component */
+
+  .star-rating {
+
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 1.5em;
+    justify-content: space-around;
+    padding: 0 .2em;
+    text-align: center;
+    width: 5em;
+  }
+
+  .star-rating input {
+    display: none;
+  }
+
+  .star-rating label {
+    color: #ccc;
+    cursor: pointer;
+  }
+
+  .star-rating :checked~label {
+    color: #f90;
+  }
+
+  .star-rating label:hover,
+  .star-rating label:hover~label {
+    color: #fc0;
+  }
+</style>
+<div class="px-4 mt-3">
+        
+    <section class="">
+      <button class="btn-sm m-3" id="download-button">Download as PDF</button>
+
+      <div class="container" id="invoice">
+        <div class="row">
+          <div class=" card border-2  mb-3 px-2 col-lg-6 col-lx-4">
+
+            <div class="m-3 ">
+              <h2 class="font-bold">Order Info</h2>
+              <ul class="p-3">
+                  <li>
+                    <p>order ID:  <%=products.id%></p>
+                  </li>
+                  <li>
+                    <p>Date: <%=products.date%></p>
+                  </li>
+                  <li>
+                    <p>Total: <%=products.totalPrice%></p>
+                  </li>
+                  <li>
+                    <p>Payment Methord:  <%=products.paymentMethod
+                        %></p>
+                  </li>
+                </ul>
+            </div>
+          </div>
+          <div class=" card border-2  mb-3 col-lg-6 col-lx-4">
+            <div class=" m-3 single_confirmation_details">
+              <h2 class="font-bold">Address</h2>
+              <ul class="p-3">
+                  <li>
+                    <p>Name:<%=products.deliveryAddress[0].name%></p>
+                    <p>Mobile Number:<%=products.deliveryAddress[0].phone%> </p>
+                    <p>Address:<%=products.deliveryAddress[0].address%></p>
+                    <p>City/Town/District:<%=products.deliveryAddress[0].city%></p>
+                    <p>State:<%=products.deliveryAddress[0].state%></p>
+                    <p>country:<%=products.deliveryAddress[0].country%></p>
+                    <p>postcode:<%=products.deliveryAddress[0].postcode%></p>
+                  </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+        <div class="">
+          
+            <div class="card border-2  mb-3 order_details_iner">
+              <div class="m-3">
+              <h2 class="font-bold">Order Details</h2>
+              <table class="table table-borderless ">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="2">Product Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(var i=0; i<products.orderedItems.length; i++) { %>
+                  <tr>
+                    <th colspan="2"><span><%=products.orderedItems[i].products.productname%></span></th>
+                    <th>x<%=products.orderedItems[i].quantity%></th>
+                    <th> <span><%=products.orderedItems[i].total%></span></th>
+                    <th>
+                    <% if (products.orderStatus==="Delivered") { %>
+                      <button class="btn btn-outline-primary" data-toggle="modal" onclick="reviewIdd('<%=products.orderedItems[i].products._id%>')" data-target="#exampleModalreview">Review</button>
+                     
+                    <% } %>
+                    </th>
+                  </tr>
+                  <%}%>
+                
+               
+               
+             
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th scope="col" colspan="3"></th>
+                    <th scope="col">Total:<%=products.totalPrice %></th>
+                  </tr>
+                </tfoot>
+
+              </table>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+      </div>
+  </div>
+
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModalreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-right-side" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add your review</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-2" style="width:350px;">
+        <form action="#" onsubmit="reviewww()">
+
+          <label for="" class="text-primary mb-0 fw-bold">Rate the product</label>
+          <div class="star-rating mt-0 mb-0 d-flex justify-content-between" onclick="removewarning()" style="width:200px;">
+            <input type="radio" id="5-stars" name="rating" value="5" />
+            <label for="5-stars" class="star">&#9733;</label>
+            <input type="radio" id="4-stars" name="rating" value="4" />
+            <label for="4-stars" class="star">&#9733;</label>
+            <input type="radio" id="3-stars" name="rating" value="3" />
+            <label for="3-stars" class="star">&#9733;</label>
+            <input type="radio" id="2-stars" name="rating" value="2" />
+            <label for="2-stars" class="star">&#9733;</label>
+            <input type="radio" id="1-star" name="rating" value="1" />
+            <label for="1-star" class="star">&#9733;</label>
+          </div>
+          <p class="text-danger mb-2 mt-0" id="removewarning" style="display:none;">Please add your rating also</p>
+          <label class=""> Title (optional) </label><br>
+          <input type="text" name="title" class="form-control">
+          <label class="" for="reviewId">Write your review</label><br>
+          <textarea name="review" class="form-control" id="reviewId" cols="30" rows="4" required></textarea>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+
+const button = document.getElementById('download-button');
+
+
+function generatePDF() {
+  // Choose the element that your content will be rendered to.
+  const element = document.getElementById('invoice');
+  // Choose the element and save the PDF for your user.
+  html2pdf().from(element).save();
+}
+
+button.addEventListener('click', generatePDF);
+
+
+
+
+
+
+    let iddd;
+  reviewIdd = (id) => {
+    iddd = id
+  }
+
+  reviewww = async () => {
+    event.preventDefault()
+    const formData = new FormData(event.target);
+    const formProps = await Object.fromEntries(formData);
+    formProps.id = iddd
+    if (formProps.rating) {
+      axios.post('/review', formProps).then(async e => {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        if (e.data.response === "login") location.href = "/login"
+        else if (e.data.error) {
+          await Toast.fire({
+            icon: 'error',
+            title: e.data.error
+          })
+        } else {
+          await Toast.fire({
+            icon: 'success',
+            title: 'Your review added successfully'
+          })
+          location.reload()
+        }
+      })
+    } else {
+      document.getElementById('removewarning').style.display = "block"
+    }
+  }
+  removewarning = () => {
+    document.getElementById('removewarning').style.display = "none"
+  }
+</script>
+
+<%- include ('layout/footer.ejs') %>
+

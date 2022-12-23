@@ -1,0 +1,201 @@
+<%- include('layout/adminheader.ejs') %>
+<script src=”https://unpkg.com/axios/dist/axios.min.js”></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mx-auto grid">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      Banner
+    </h2>
+    <!-- TABLE -->
+    <!-- curtains table start -->
+   
+
+    <div class="w-full overflow-hidden rounded-lg shadow-xs mt-2">
+      <div class="w-full overflow-x-auto">
+        <table class="table">
+          <a href="/admin/addbanner" class="btn btn-success my-2 float-end"
+            >Add banner</a
+          >
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Heading</th>
+              <th scope="col">Sub Heading</th>
+              <th scope="col">Description</th>
+              <th scope="col">Image</th>
+              <th scope="col">URL</th>
+
+
+
+
+              
+            </tr>
+          </thead>
+          <tbody>
+            <% for( let i = 0; i < details.length; i++ ) { %>
+            
+            <tr>
+              <th scope="row">1</th>
+              <td><%=details[i].heading %> </td>
+              <td><%=details[i].sub %> </td>
+              <td><%=details[i].description %> </td>
+              <td>
+                <div class=>
+                <img src="/bannerImages<%=details[i].image[0].filename %> " width="100" height="150" alt="">
+
+
+                </div>
+              </td>
+              <td><%=details[i].url  %> </td>
+            </tr>
+            <% } %>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
+      >
+        <span class="flex items-center col-span-3"> Showing 21-30 of 100 </span>
+        <span class="col-span-2"></span>
+        <!-- Pagination -->
+        <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+          <nav aria-label="Table navigation">
+            <ul class="inline-flex items-center">
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
+                  aria-label="Previous"
+                >
+                  <svg
+                    class="w-4 h-4 fill-current"
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                      fill-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                >
+                  1
+                </button>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                >
+                  2
+                </button>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple"
+                >
+                  3
+                </button>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                >
+                  4
+                </button>
+              </li>
+              <li>
+                <span class="px-3 py-1">...</span>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                >
+                  8
+                </button>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                >
+                  9
+                </button>
+              </li>
+              <li>
+                <button
+                  class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
+                  aria-label="Next"
+                >
+                  <svg
+                    class="w-4 h-4 fill-current"
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                      fill-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </span>
+      </div>
+    </div>
+    <!-- curtains table end -->
+
+    <!-- TABLE END  -->
+  </div>
+  <!-- 
+</div>
+
+
+</div> -->
+</main>
+<script>
+
+const deleteproduct = (id) =>{
+  Swal.fire({
+  title: 'Are you sure?',
+  text: "Sure! want to delete it ?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+    axios.delete("/admin/deleteproduct", {data : {id}}).then((e)=>{
+  if(e.data.response){
+
+location.href="/admin/product"
+  }
+})
+  }
+})
+
+
+
+
+}
+
+
+
+
+
+
+    
+
+
+
+</script>
+
+<%- include('layout/admin-footer.ejs') %>

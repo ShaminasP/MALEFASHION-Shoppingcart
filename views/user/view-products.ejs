@@ -1,0 +1,186 @@
+<%- include ('layout/header.ejs') %>
+<%- include ('layout/breadcrumb.ejs') %>
+<!-- Shop Section Begin -->
+<section class="shop spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="shop__sidebar">
+          <!-- <div class="shop__sidebar__search">
+            <form action="#">
+              <input type="text" placeholder="Search...">
+              <button type="submit"><span class="icon_search"></span></button>
+            </form>
+          </div> -->
+          <div class="shop__sidebar__accordion">
+            <div class="accordion" id="accordionExample">
+              <div class="card">
+                <div class="card-heading">
+                  <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <div class="shop__sidebar__categories">
+                      <ul class="nice-scroll">
+
+                        <% for( let i = 0; i < categories.length; i++ ) { %>
+
+                        <li><a style="cursor: pointer;" onclick="filterByCategory('<%=categories[i]._id%>')"><%=categories[i].category%> </a></li>
+                        <% } %>
+                      </ul>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9" id="productsid">
+
+        <div class="row">
+
+          <% for(var i=0;i<products.results.length;i++){ %>
+          <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="product__item">
+              <div class="product__item__pic set-bg" data-setbg=""><a href="/productsdetails/<%=products.results[i]._id  %>  ">
+                  <img src="/Images<%=products.results[i].Image[0].filename %> " width="400px" height="250px" alt="">
+                </a>
+              </div>
+              <div class="product__item__text">
+                <h6><%=products.results[i].productname%> </h6>
+                <a onclick="addToCart('<%=products.results[i]._id  %>')" style="cursor:pointer;" class="add-cart ">+ Add To Cart</a>
+                <div class="rating">
+                  <% if (products.results[i].rating) { %>
+                  <% for( let k = 0; k < products.results[i].rating/20; k++ ) { %>
+                  <i class="fa fa-star text-warning"></i>
+
+                  <% } %>
+                  <% } else { %>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <i class="fa fa-star-o"></i>
+                  <% } %>
+
+                </div>
+                <% if (products.results[i].offPrice >0) { %>
+                <del class="text-danger"><%=products.results [i].price%> </del>
+
+                <h5><%=products.results [i].offPrice%> </h5>
+
+                <% } else { %>
+                <h5><%=products.results [i].price%> </h5>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% } %>
+
+
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="product__pagination">
+              <% if (products.previous) { %>
+              <a href="/products?page=<%=products.previous.page %>&limit=<%=products.previous.limit %>  ">
+                << /a>
+                  <% } %>
+                  <a class="active"><%=products.current.page %> </a>
+
+                  <!-- <a href="">Current</a> -->
+                  <% if (products.next) { %>
+                  <a href="/products?page=<%=products.next.page%>&limit=<%=products.next.limit %>  ">></a>
+
+                  <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Shop Section End -->
+<script>
+  function filterByCategory(id) {
+    axios.get('/filterCategory', {
+      params: {
+        id: id
+      }
+    }).then((e) => {
+      if (e.data) {
+        let products = e.data.productByCategory
+        let html = "";
+        products.forEach(element => {
+          console.log(element)
+          html += `<div  class="col-lg-4 col-md-6 col-sm-6">
+            <div class="product__item">
+              <div class="product__item__pic set-bg" data-setbg=""><a href="/productsdetails/${element._id} ">
+                  <img src="/Images${element.Image[0].filename } " width="400px" height="250px" alt="">
+                </a>
+              </div>
+              <div class="product__item__text">
+                <h6>${element.productname} </h6>
+                <a onclick="addToCart('${element._id}')" style="cursor:pointer;" class="add-cart ">+ Add To Cart</a>
+                <div class="rating">`
+          for (let k = 0; k < element.rating / 20; k++) {
+            html += ` <i class="fa fa-star text-warning"></i>`
+
+          }
+          for (let k = 0; k < 5 - (element.rating / 20); k++) {
+            html += ` <i class="fa fa-star-o"></i>`
+
+          }
+
+          html += ` </div>`
+          if (element.offPrice > 0) {
+            html += `  <del class="text-danger">${element.price} </del>
+
+                <h5>${element.offPrice} </h5>`
+
+          } else {
+            html += `   <h5>${element.price}  </h5>`
+          }
+          html += ` </div>
+            </div>
+          </div>  `
+        });
+        console.log(html)
+
+        document.getElementById("productsid").innerHTML = html;
+      }
+    })
+  }
+
+
+  function addToCart(id) {
+    axios.patch('/shopping-cart', {
+      id: id
+    }).then((e) => {
+      if (e.data.session === "login") location.href = "/login"
+
+      else if (e.data.response) {
+        console.log(e.data.response);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Product is added ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Product Limit reached!',
+        })
+      }
+
+    })
+  }
+</script>
+<%- include ('layout/footer.ejs') %>

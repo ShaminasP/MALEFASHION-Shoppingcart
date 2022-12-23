@@ -1,0 +1,182 @@
+<%- include ('layout/header.ejs') %>
+
+<script>
+  function validateForm() {
+    let name = document.getElementById("nameid").value;
+    let email = document.getElementById("emailid").value;
+    let mobile = document.getElementById("mobileid").value;
+    let password = document.getElementById("passwordid").value;
+    let password2 = document.getElementById("password2id").value;
+    let abcde = true;
+
+    if (name === "") {
+      document.getElementById("nameerror").innerHTML = "Please enter a name";
+      abcde = false;
+    }
+    if (email === "") {
+      document.getElementById("emailerror").innerHTML = "Please enter an email";
+      abcde = false;
+    }
+    if (mobile === "") {
+      document.getElementById("moberror").innerHTML =
+        "Please enter your mobile number";
+      abcde = false;
+    }
+    if (password === "") {
+      document.getElementById("passerror").innerHTML =
+        "Please enter your password";
+      abcde = false;
+    }
+    if (password2 === "") {
+      document.getElementById("pass2error").innerHTML =
+        "Please re enter your password";
+      abcde = false;
+    } else if (password2 !== password) {
+      document.getElementById("pass2error").innerHTML = "Invalid password";
+      abcde = false;
+    }
+    return abcde;
+  }
+
+  function nullName() {
+    document.getElementById("nameerror").innerHTML = "";
+  }
+  function nullEmail() {
+    document.getElementById("emailerror").innerHTML = "";
+  }
+
+  function nullPassword() {
+    document.getElementById("passerror").innerHTML = "";
+  }
+
+  function nullPassword2() {
+    document.getElementById("pass2error").innerHTML = "";
+  }
+
+  function nullMobile() {
+    document.getElementById("moberror").innerHTML = "";
+  }
+
+  function onlyNumberKey(evt) {
+    // Only ASCII character in that range allowed
+    var ASCIICode = evt.which ? evt.which : evt.keyCode;
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return false;
+    return true;
+  }
+
+  function ValidateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return true;
+    }
+    alert("You have entered an invalid email address!");
+    return false;
+  }
+</script>
+
+<section class="vh-100">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="mt-5">
+          <h3>Welcome !</h3>
+          <h5>Enjoy your shopping Exprerience with us</h5>
+        </div>
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+
+              <form
+                action="/signup"
+                method="post"
+                id="form"
+                onsubmit="return validateForm()"
+              >
+                <div class="form-outline">
+                  <input
+                    type="text"
+                    id="nameid"
+                    class="form-control form-control-lg"
+                    placeholder="Name"
+                    name="name"
+                    onkeyup="nullName()"
+                    onkeydown="return /[a-z]/i.test(event.key)"
+                  />
+                </div>
+                <p class="text-danger" id="nameerror"></p>
+
+                <div class="form-outline mt-4">
+                  <input
+                    type="email"
+                    id="emailid"
+                    class="form-control form-control-lg"
+                    placeholder="Email"
+                    name="email"
+                    onkeypress="validateEmail()"
+                    onkeyup="nullEmail()"
+                  />
+                </div>
+                <p class="text-danger" id="emailerror"></p>
+
+                <div class="form-outline mt-4">
+                  <input
+                    type="text"
+                    id="mobileid"
+                    class="form-control form-control-lg"
+                    placeholder="mobile"
+                    name="mobile"
+                    maxlength="10"
+                    onkeyup="nullMobile()"
+                    onkeypress="return onlyNumberKey(event)"
+                  />
+                </div>
+                <p class="text-danger" id="moberror"></p>
+
+                <div class="form-outline mt-4">
+                  <input
+                    type="text"
+                    id="passwordid"
+                    class="form-control form-control-lg"
+                    placeholder="password"
+                    name="password"
+                    onkeyup="nullPassword()"
+                  />
+                </div>
+                <p class="text-danger" id="passerror"></p>
+
+                <div class="form-outline m-t4">
+                  <input
+                    type="text"
+                    id="password2id"
+                    class="form-control form-control-lg"
+                    placeholder="confirm password"
+                    onkeyup="nullPassword2()"
+                  />
+                </div>
+                <p class="text-danger" id="pass2error"></p>
+
+                <div class="d-flex justify-content-center">
+                  <button
+                    type="submit"
+                    class="btn btn-dark btn-block btn-lg gradient-custom-4 text-white"
+                  >
+                    Register
+                  </button>
+                </div>
+
+                <p class="text-center text-muted mt-5 mb-0">
+                  Have already an account?
+                  <a href="/login" class="fw-bold text-body"
+                    ><u>Login here</u></a
+                  >
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include ('layout/footer.ejs') %>

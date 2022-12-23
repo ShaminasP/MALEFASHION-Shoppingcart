@@ -1,0 +1,55 @@
+<%- include ('layout/header.ejs') %>
+<section class="vh-100" style="background-color: #f6f7f8">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong" style="border-radius: 1rem">
+          <form action="/otp" method="post">
+            <div class="card-body p-5 text-center">
+              <h3 class="mb-5">OTP</h3>
+
+              <div class="form-outline mb-4">
+                <input
+                  name="otp"
+                  type="text"
+                  class="form-control form-control-lg"
+                />
+              </div>
+
+              <hr class="my-4" />
+
+              <button class="btn btn-dark btn-lg btn-block" type="submit">
+                Verify
+              </button>
+              <div id="timerId"></div>
+              <p id="resend">Resend OTP in <span id="countdowntimer">30 </span> Seconds</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  var timeleft = 30;
+  var downloadTimer = setInterval(function () {
+    timeleft--;
+    document.getElementById("countdowntimer").textContent = timeleft;
+    if (timeleft <= 0) {
+      clearInterval(downloadTimer);
+      document.getElementById(
+        "timerId"
+      ).innerHTML = `<button onclick="resend()" class="btn btn-outline-white">
+                        <span class="font-weight-bold text-danger cursor">Resend</span></button> `;
+                        document.getElementById("resend").style.display = "none";
+    }
+  }, 1000);
+
+  function resend() {
+    axios.get('/otpresend',{}).then(()=>{
+      
+    })
+  }
+</script>
+
+<%- include ('layout/footer.ejs') %>

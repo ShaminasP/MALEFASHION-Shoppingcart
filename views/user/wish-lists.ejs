@@ -1,0 +1,143 @@
+<%- include ('layout/header.ejs') %>
+
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+  <div class="container" style="min-height: 36vh">
+    <% if (products) { %> <% if (products.length) { %>
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="shopping__cart__table">
+          <table style="width: 100vh">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for( var i = 0; i < products.length; i++ ) { %>
+
+              <tr>
+                <td class="product__cart__item">
+                  <div class="product__cart__item__pic">
+                    <img
+                      src="/Images<%=products[i].product.Image[0].filename %> "
+                      alt=""
+                    />
+                  </div>
+                  <div class="product__cart__item__text">
+                    <h6><%=products[i].product.productname %></h6>
+                  </div>
+                </td>
+                <div>
+                  <td class="cart__price"><%=products[i].product.price %></td>
+                </div>
+                <% if (products[i].product.quantity) { %>
+                <td class="cart__price text-success" id="qty">In stock</td>
+                <% } else { %>
+                <td class="cart__price text-danger" id="qty">Out of Stock</td>
+
+                <% } %>
+
+                <td class="cart__close">
+                  <i
+                    class="fa fa-close"
+                    style="cursor: pointer"
+                    onclick="deleteList('<%=products[i]._id %>')"
+                  ></i>
+                </td>
+
+                <% if (products[i].product.quantity) { %>
+                <td>
+                  <div class="">
+                    <div class="continue__btn">
+                      <a
+                        onclick="addToCart('<%=products[i].product._id %>','<%=products[i]._id %>')"
+                        style="cursor: pointer"
+                        >ADD TO CART</a
+                      >
+                    </div>
+                  </div>
+                </td>
+                <% } %>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="continue__btn">
+              <a href="#">Continue Shopping</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } else { %>
+    <div>
+      <h1>Your Wishlist is empty</h1>
+    </div>
+    <% } %> <% } else { %>
+    <div>
+      <h1>Your Wishlist is empty</h1>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  function deleteList(id) {
+    Swal.fire({
+      title: "Are you sure?",
+      //   text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete("/deletelist", { data: { id } }).then((e) => {
+          location.href = "/wishlist";
+        });
+      }
+    });
+  }
+  function deleteListt(id) {
+    axios.delete("/deletelist", { data: { id } }).then(async (e) => {
+      await Swal.fire({
+        icon: "success",
+        title: "Product is added ",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      location.href = "/wishlist";
+    });
+  }
+
+  function addToCart(id){
+        
+        axios.patch('/shopping-cart',{id:id}).then((e)=>{
+            if(e.data.response){
+                Swal.fire({
+            icon: 'success',
+            title: 'Product is added ',
+            showConfirmButton: false,
+            timer: 1500
+            })  
+            }else{
+                Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Product Limit reached!',
+})
+            }
+            
+        })
+    }
+</script>
+<!-- Shopping Cart Section End -->
+<%- include ('layout/footer.ejs') %>

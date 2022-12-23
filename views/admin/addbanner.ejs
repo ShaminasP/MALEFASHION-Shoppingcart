@@ -1,0 +1,106 @@
+<%- include('layout/adminheader.ejs') %>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mt-8 mx-auto grid">
+    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <!-- General elements -->
+      <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+        Add Banner
+      </h4>
+
+      <div class="px-4 align-items-center">
+        <div class="card my-4">
+          <div class="card-body">
+            <form
+              action="/admin/addbanner "
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label"
+                  >Heading</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="html5-text-input"
+                    name="heading"
+                    value=" "
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label"
+                  >Sub Heading</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="html5-text-input"
+                    name="sub"
+                    value=" "
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >URL</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="search"
+                    id="html5-search-input"
+                    name="url"
+                    value=""
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Description</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="search"
+                    id="html5-search-input"
+                    name="description"
+                    value=""
+                  />
+                </div>
+              </div>
+
+              <!-- <div class="mr-5 d-flex p-2">
+                <img class="mx-2" src="" width= "100px" height="150px" alt="" />
+              </div> -->
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Image</label
+                >
+                <div class="col-md-10">
+                  <input
+                    type="file"
+                    name="Image"
+                    multiple
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <button class="btn btn-primary d-grid w-100" type="submit">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<%- include('layout/admin-footer.ejs') %>

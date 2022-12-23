@@ -1,0 +1,133 @@
+<%- include('layout/adminheader.ejs') %>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mt-8 mx-auto grid">
+    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <!-- General elements -->
+      <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+        Add Coupon
+      </h4>
+
+      <div class="px-4 align-items-center">
+        <div class="card my-4">
+          <div class="card-body">
+            <form
+              action="/admin/addcoupon "
+              method="post"
+             
+            >
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label"
+                  >Coupon code</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="html5-text-input"
+                    name="code"
+                    value=" "
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-text-input" class="col-md-2 col-form-label"
+                  >Discount</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="html5-text-input"
+                    name="discount"
+                    value=" "
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Starting Date</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="date"
+                    id="html5-search-input"
+                    name="startingdate"
+                    value=""
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Ending Date</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="date"
+                    id="html5-search-input"
+                    name="endingdate"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Discount Limit</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="search"
+                    id="html5-search-input"
+                    name="discountlimit"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Coupouncount</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="search"
+                    id="html5-search-input"
+                    name="coupouncount"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="html5-search-input" class="col-md-2 col-form-label"
+                  >Min Cart amount</label
+                >
+                <div class="col-md-10">
+                  <input
+                    class="form-control"
+                    type="search"
+                    id="html5-search-input"
+                    name="cartamount"
+                    value=""
+                  />
+                </div>
+              </div>
+
+              
+
+              <div class="mb-3 row">
+                <button class="btn btn-primary d-grid w-100" type="submit">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<%- include('layout/admin-footer.ejs') %>

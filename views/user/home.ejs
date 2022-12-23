@@ -1,0 +1,151 @@
+<%- include ('layout/header.ejs') %>
+<!-- Hero Section Begin -->
+
+<section class="hero">
+  <div class="hero__slider owl-carousel">
+    <% for( let i = 0; i < bannerData.length; i++ ) { %>
+    <div class="hero__items set-bg" data-setbg="/bannerImages<%=bannerData[i].image[0].filename  %> ">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-5 col-lg-7 col-md-8">
+            <div class="hero__text">
+              <h6><%=bannerData[i].heading %></h6>
+              <h2><%=bannerData[i].sub %></h2>
+              <p><%=bannerData[i].description%></p>
+              <a href="<%=bannerData[i].url %> " class="primary-btn">Shop now <span class="arrow_right"></span></a>
+              <div class="hero__social">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-pinterest"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- Hero Section End -->
+
+<!-- Banner Section Begin -->
+<section class="banner spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7 offset-lg-4">
+        <div class="banner__item">
+          <div class="banner__item__pic">
+            <img src="img/banner/banner-1.jpg" alt="" />
+          </div>
+          <div class="banner__item__text">
+            <h2>Men Clothing Collection</h2>
+            <a href="">Shop now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Banner Section End -->
+
+<!-- Product Section Begin -->
+<section class="product spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="filter__controls">
+          <li class="active" data-filter="*">Best Sellers</li>
+          <li data-filter=".new-arrivals">New Arrivals</li>
+          <li data-filter=".hot-sales">Hot Sales</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row product__filter">
+      <% for( let i = 0; i< latestProduct.length; i++ ) { %>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+
+        <div class="product__item">
+          <div class="product__item__pic set-bg" data-setbg="/Images<%=latestProduct[i].Image[0].filename %> ">
+            <span class="label">New</span>
+
+          </div>
+          <div class="product__item__text">
+            <h6><%=  latestProduct[i].productname %> </h6>
+            <a href="#" class="add-cart">+ Add To Cart</a>
+            <div class="rating">
+              <% if (latestProduct[i].rating) { %>
+              <% for( let k = 0; k < latestProduct[i].rating/20; k++ ) { %>
+              <i class="fa fa-star text-warning"></i>
+
+              <% } %>
+              <% } else { %>
+              <i class="fa fa-star-o"></i>
+              <i class="fa fa-star-o"></i>
+              <i class="fa fa-star-o"></i>
+              <i class="fa fa-star-o"></i>
+              <i class="fa fa-star-o"></i>
+              <% } %>
+
+
+            </div>
+            <% if (latestProduct[i].offPrice >0) { %>
+            <del class="text-danger"><%=latestProduct [i].price%> </del>
+            <h5><%=latestProduct [i].offPrice%> </h5>
+            <% } else { %>
+            <h5><%=latestProduct [i].price%> </h5>
+            <% } %>
+
+
+          </div>
+        </div>
+      </div>
+
+      <% } %>
+      <% for( let i = 0; i< hotCollection.length; i++ ) { %>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+
+        <div class="product__item">
+          <div class="product__item__pic set-bg" data-setbg="/Images<%=hotCollection[i].Image[0].filename %> ">
+
+          </div>
+          <div class="product__item__text">
+            <h6><%=hotCollection[i].productname %> </h6>
+            <a href="#" class="add-cart">+ Add To Cart</a>
+            <div class="rating">
+              <% if (hotCollection[i].rating) { %>
+                <% for( let k = 0; k < hotCollection[i].rating/20; k++ ) { %>
+                <i class="fa fa-star text-warning"></i>
+  
+                <% } %>
+                <% } else { %>
+                <i class="fa fa-star-o"></i>
+                <i class="fa fa-star-o"></i>
+                <i class="fa fa-star-o"></i>
+                <i class="fa fa-star-o"></i>
+                <i class="fa fa-star-o"></i>
+                <% } %>
+            </div>
+            <% if (hotCollection[i].offPrice >0) { %>
+            <del class="text-danger"><%=hotCollection [i].price%> </del>
+
+            <h5><%=hotCollection [i].offPrice%> </h5>
+
+            <% } else { %>
+            <h5><%=hotCollection [i].price%> </h5>
+            <% } %>
+
+
+          </div>
+        </div>
+
+      </div>
+      <% } %>
+
+    </div>
+  </div>
+</section>
+<!-- Product Section End -->
+
+<%- include ('layout/footer.ejs') %>

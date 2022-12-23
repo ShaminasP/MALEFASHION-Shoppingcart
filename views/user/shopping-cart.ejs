@@ -1,0 +1,232 @@
+<%- include ('layout/header.ejs') %>
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+  <div class="container" style="min-height: 36vh">
+
+
+    <% if (item) { %>
+
+    <% if (item.length) { %>
+    <div class="row">
+      <div class="col-lg-8">
+
+        <div class="shopping__cart__table">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <% for (var i=0;i<item.length;i++){ %>
+
+              <tr>
+
+                <td class="product__cart__item">
+                  <% if (item[i].products.quantity<item[i].quantity) { %>
+                  <span class="badge badge-danger me-5 px-3" style="position:absolute; margin-top:50px; left: 15px; z-index:1;">Out
+                    of
+                    stock</span>
+
+                  <% } %>
+                  <div class="product__cart__item__pic">
+                    <img src="/Images<%=item[i].products.Image[0].filename  %>  " width="100px" alt="" />
+                  </div>
+
+                  <div class="product__cart__item__text m-0">
+                    <h6><%=item[i].products.productname %> </h6>
+                    <h5><%=item[i].products.price %></h5>
+                  </div>
+                </td>
+                <td class="quantity__item">
+                  <div class="quantity d-flex ">
+
+
+                    <div class="m-3">
+                      <a onclick="reduceQuantity('<%=item[i].products._id %>')" style="cursor:pointer ;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16" id="minusbutton">
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                          <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
+                        </svg>
+                      </a>
+
+                    </div>
+                    <div class="m-3 " id='<%=item[i].products._id%>'>
+                      <%=item[i].quantity %>
+                    </div>
+                    <div class="m-3">
+                      <a onclick="addQuatity('<%=item[i].products._id%>')" style="cursor:pointer ;"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </td>
+                <td id="total<%=item[i].products._id%>" class="cart__price"><%=item[i].total%> </td>
+                <td class="cart__close"><i class="fa fa-close" style="cursor: pointer;" onclick="deleteProduct('<%=item[i].products._id%>')"></i></td>
+              </tr>
+
+              <% } %>
+
+
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="continue__btn">
+              <a href="#">Continue Shopping</a>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="continue__btn update__btn">
+              <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="cart__discount">
+          <h6>Discount codes</h6>
+          <form action="#">
+            <input type="text" placeholder="Coupon code" />
+            <button type="submit">Apply</button>
+          </form>
+        </div>
+        <div class="cart__total">
+          <h6 id="ID">Cart total</h6>
+          <ul>
+            <li>Subtotal <span id="sub"><%= subtotal %> </span></li>
+            <!-- <li>Total <span>$ 169.50</span></li> -->
+          </ul>
+          <button onclick="checkOut()" id="confirmbutton" class="primary-btn ml-3 text-white" style="cursor: pointer;">Proceed to checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <% for( let i = 0; i < item.length; i++ ) { %>
+      <% if (item[i].products.quantity<item[i].quantity) { %>
+      <script>
+        document.getElementById("confirmbutton").disabled = true;
+      </script>
+      <% } %>
+      
+      <% } %>
+
+    <% } else { %>
+    <div class="row">
+      <div class="col-lg-8">
+
+        <div class="shopping__cart__table">
+          <h1>
+            Your cart is empty
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <% } %>
+
+    <% } else { %>
+    <div class="row">
+      <div class="col-lg-8">
+
+        <div class="shopping__cart__table">
+          <h1>
+            Your cart is empty
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <% } %>
+
+
+
+
+
+  </div>
+</section>
+<!-- Shopping Cart Section End -->
+
+
+<script>
+  function checkOut() {
+    location.href = "/checkout"
+  }
+
+  function deleteProduct(id) {
+    Swal.fire({
+      title: "Are you sure?",
+      //   text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete('/deletecart', {
+          data: {
+            id
+          }
+        }).then((e) => {
+          if (e.data.session === "login") location.href = "/login";
+
+          location.href = "/shoppingcart";
+        });
+      }
+    });
+  }
+
+
+  function addQuatity(id) {
+    axios.get('/addquantity', {
+      params: {
+        id: id
+      }
+    }).then((e) => {
+      if (e.data.session === "login") location.href = "/login";
+      else if (e.data.response) {
+        document.getElementById('sub').innerHTML = e.data.subtotal;
+        document.getElementById('total' + id).innerHTML = e.data.total;
+        document.getElementById(id).innerHTML = e.data.quantity;
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Product Limit reached!',
+        })
+      }
+
+
+
+    })
+  }
+
+  function reduceQuantity(id) {
+    if (document.getElementById(id).innerHTML > 1) {
+      axios.get('/reducequantity', {
+        params: {
+          id: id
+        }
+      }).then((e) => {
+        if (e.data.session === "login") location.href = "/login"
+
+        document.getElementById('sub').innerHTML = e.data.subtotal;
+        document.getElementById('total' + id).innerHTML = e.data.total;
+        document.getElementById(id).innerHTML = e.data.quantity;
+
+      })
+
+
+
+    }
+  }
+</script>
+<%- include ('layout/footer.ejs') %>

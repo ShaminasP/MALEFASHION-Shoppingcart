@@ -1,0 +1,205 @@
+<%- include ('layout/header.ejs') %>
+<style media="screen">
+    figure.zoom {
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+figure.zoom img:hover {
+  opacity: 0;
+}
+figure.zoom img {
+  transition: opacity 0.5s;
+  display: block;
+  width: 100%;
+}
+  </style>
+<!-- Shop Details Section Begin -->
+<section class="shop-details">
+    <div class="product__details__pic">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="product__details__breadcrumb">
+                        <a href="./index.html">Home</a>
+                        <a href="./shop.html">Shop</a>
+                        <span>Product Details</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <% for (var i=0;i<productDetails.Image.length;i++){ %> 
+                        <li class="nav-item">
+                            <a class="nav-link active" onclick="getImage('/Images<%=productDetails.Image[i].filename%>')">
+                                <img src="/Images<%=productDetails.Image[i].filename%>" alt="">
+                                
+                            </a>    
+                        </li>
+                      
+                        <% } %> 
+                        
+                    </ul>
+                </div>
+                <div class="col-lg-6 col-md-9">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <figure class="zoom" onmousemove="zoom(event)" id="zoommmm" style="background-image:url(/Images<%=productDetails.Image[0].filename%>)">
+                                <img id="imageid" src="/Images<%=productDetails.Image[0].filename%>" width="400px" height="500px" alt="">
+                            </figure>
+                            </div>
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product__details__content">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <div class="product__details__text">
+                        <h4><%=productDetails.productname%> </h4>
+                        <div class="rating">
+                            <% for( let i = 0; i <productDetails.rating/20 ; i++ ) { %>
+                                <i class="fa fa-star"></i>
+                            <% } %>
+                            <% for( let i = 0; i < 5-(productDetails.rating/20) ; i++ ) { %>
+                                <i class="fa fa-star-o"></i>
+                            <% } %>
+                             <!-- <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i> -->
+                           
+                            <span>  <%=productDetails.review %>  Reviews</span>
+                        </div>
+                        <h3>Rs <%=productDetails.price %>/-</h3>
+                        <p><%=productDetails.description %> </p>
+                        <!-- <div class="product__details__option">
+                            <div class="product__details__option__size">
+                                <span>Size:</span>
+                                <label for="xxl">xxl
+                                    <input type="radio" id="xxl">
+                                </label>
+                                <label class="active" for="xl">xl
+                                    <input type="radio" id="xl">
+                                </label>
+                                <label for="l">l
+                                    <input type="radio" id="l">
+                                </label>
+                                <label for="sm">s
+                                    <input type="radio" id="sm">
+                                </label>
+                            </div>
+                            <div class="product__details__option__color">
+                                <span>Color:</span>
+                                <label class="c-1" for="sp-1">
+                                    <input type="radio" id="sp-1">
+                                </label>
+                                <label class="c-2" for="sp-2">
+                                    <input type="radio" id="sp-2">
+                                </label>
+                                <label class="c-3" for="sp-3">
+                                    <input type="radio" id="sp-3">
+                                </label>
+                                <label class="c-4" for="sp-4">
+                                    <input type="radio" id="sp-4">
+                                </label>
+                                <label class="c-9" for="sp-9">
+                                    <input type="radio" id="sp-9">
+                                </label>
+                            </div>
+                        </div> -->
+                       
+                        <div class="product__details__btns__option">
+                               
+                            <a onclick="addToCart('<%=productDetails._id%>')"  class="primary-btn text-white" style="cursor:pointer ;" >add to cart</a>
+                        
+                            <a onclick="addToWishlist('<%=productDetails._id%>')" style="cursor:pointer ;"><i class="fa fa-heart"></i> add to wishlist</a>
+                        
+                        </div>
+                        <div class="product__details__last__option">
+                            <h5><span>Guaranteed Safe Checkout</span></h5>
+                            <img src="img/shop-details/details-payment.png" alt="">
+                            <ul>
+                                <li><span>SKU:</span> 3812912</li>
+                                <li><span>Categories:</span> Clothes</li>
+                                <li><span>Tag:</span> Clothes, Skin, Body</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+               
+            </div> 
+        </div>
+    </div>
+</section>
+<script>
+    function addToWishlist(id){
+        axios.patch('/wishlist',{id:id }).then((e)=>{
+        if(e.data.session==="login")location.href="/login"
+  else if(e.data.return){
+                Swal.fire({
+            icon: 'success',
+            title:"Added to wishlist",
+            showConfirmButton: false,
+            timer: 1500
+            })
+            }else{
+                Swal.fire({
+            icon: 'error',
+            title:"Item is already in your wishlist",
+            showConfirmButton: false,
+            timer: 1500
+            }) 
+            }
+           
+        })
+    }
+    function getImage(src){
+        document.getElementById("imageid").src=src
+        document.getElementById('zoommmm').style.backgroundImage = `url(${src})`
+        //style="background-image:url(/Images<%=productDetails.Image[0].filename%>)"
+    }
+
+    function addToCart(id){
+        axios.patch('/shopping-cart',{id:id}).then((e)=>{
+        if(e.data.session==="login")location.href="/login"
+          else if(e.data.response){
+                Swal.fire({
+            icon: 'success',
+            title: 'Product is added ',
+            showConfirmButton: false,
+            timer: 1500
+            })  
+            }else{
+                Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Product Limit reached!',
+})
+            }
+            
+        })
+    }
+
+
+   
+function zoom(e){
+  var zoomer = e.currentTarget;
+  e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+  e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+  x = offsetX/zoomer.offsetWidth*100
+  y = offsetY/zoomer.offsetHeight*100
+  zoomer.style.backgroundPosition = x + '% ' + y + '%';
+}
+</script>
+<%- include('layout/footer.ejs') %>
+<!-- Shop Details Section End -->

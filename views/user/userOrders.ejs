@@ -1,0 +1,96 @@
+      <!-- TABLE -->
+
+      <%- include ('layout/header.ejs') %>
+
+
+      <main class="h-full pb-16 overflow-y-auto">
+         
+        <div class="container px-6 mx-auto grid">
+          
+          <!-- TABLE -->
+          <!-- curtains table start -->
+
+
+          <div class="w-full overflow-hidden rounded-lg shadow-xs mt-2">
+            <div class="w-full overflow-x-auto">
+        <% if (userOrderDetails.length) { %>
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Orders
+          </h2>
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Order ID</th>
+
+                    <th scope="col">Amount</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Date</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for( let i = 0; i < userOrderDetails.length; i++ ) { %>
+
+                  <tr>
+                    <th scope="row"><%=i+1%> </th>
+                    <td><%=userOrderDetails[i]._id%> </td>
+                    <td><%=userOrderDetails[i].totalPrice %> </td>
+                    <td><%=userOrderDetails[i].orderStatus%> </td>
+                    <td><%=userOrderDetails[i].date%> </td>
+                    <td> <a class="font-weight-bold text-primary" href="/vieworderdetails/<%=userOrderDetails[i]._id%> ">VIEW MORE</a></td>
+                    <% if (userOrderDetails[i].orderStatus ==="Delivered") { %>
+                    <td> <a href="" onclick="returnOrder('<%=userOrderDetails[i]._id%>')" class="font-weight-bold text-danger">RETURN</a></td>
+                    <% } else if (userOrderDetails[i].orderStatus ==="Returned" ||userOrderDetails[i].orderStatus=== "Cancelled") { %>
+
+                    <% } else { %>
+                    <td> <a href="" onclick="cancelOrder('<%=userOrderDetails[i]._id%>')" class="font-weight-bold text-danger">CANCEL</a></td>
+                    <% } %>
+
+
+                  </tr>
+                  <% } %>
+
+                 
+
+                </tbody>
+              </table>
+              <% } else { %>
+                <p>You haven't made any orders</p>
+                <a href="/products">Order Now</a>
+               <% } %>
+            </div>
+          </div>
+
+
+          <!-- TABLE END  -->
+        </div>
+
+
+
+        </div> 
+       
+
+      </main>
+
+      <script>
+        let cancelOrder = (id) => {
+          axios.delete('/cancelorder', {
+            data: {
+              id: id
+            }
+          }).then(() => {
+
+          })
+        }
+        let returnOrder = (id) => {
+          axios.delete('/returnorder', {
+            data: {
+              id: id
+            }
+          }).then(() => {
+
+          })
+        }
+      </script>
