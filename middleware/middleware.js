@@ -24,9 +24,9 @@ exports.loginCheck = (req, res, next) => {
 };
 
 exports.adminCheck = (req, res, next) => {
-  // if(req.session.admin)
+  if(req.session.admin)
   next();
-  // else res.redirect('/admin/login')
+  else res.redirect('/admin/login')
 };
 
 
