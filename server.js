@@ -78,7 +78,9 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 
-
+app.use((req,res)=>{
+res.render('user/404')
+})
  
 app.use((err, req, res, next) => {
   console.log(err)

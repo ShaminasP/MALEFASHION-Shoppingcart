@@ -330,7 +330,7 @@
     const newTotal = document.getElementById('grandtotal').innerHTML;
     const code = document.getElementById('coupon').value;
     let payment
-    if (result[0].checked || result[1].checked || result[2].checked || result[3].checked) {
+    if (result[0].checked || result[1].checked || result[2].checked ) {
       for (i = 0; i < result.length; i++) {
         if (result[i].checked) payment = result[i].value;
       }
@@ -348,6 +348,9 @@
           location.href = "/login"
         } else if (e.data.response === "success") {
           location.href = "/orderSuccess"
+        }else if (e.data.response === "addressRequired") {
+          document.getElementById('msg').innerHTML = "Please select or add delivery address"
+
         }
         const wallet = e.data.wallet
         const orders = e.data.orders;

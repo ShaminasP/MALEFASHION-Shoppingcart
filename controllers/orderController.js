@@ -47,113 +47,117 @@ const toOrder = async (req, res, next) => {
     const products = cartItems.bucket;
 
     const totalPrice = req.body.newTotal;
-    if (payment == "COD") {
-      const newOrder = new order({
-        user: userId,
-        orderedItems: products,
-        totalPrice: totalPrice,
-        deliveryAddress: address,
-        paymentMethod: payment,
-        paymentStatus: "Pending",
-        orderStatus: "Confirmed",
-        date: moment(Date.now()).format("DD-MM-YYYY"),
-      });
-      newOrder.save().then(async () => {
-        products.forEach(async (data) => {
-          const productID = data.products._id;
-          const productQty = data.quantity;
-          await inventory(productID, -productQty);
-        });
-
-        await couponModel.findOneAndUpdate(
-          { couponCode: coupon },
-          { $push: { users: { user: userId } }, $inc: { couponCount: -1 } }
-        );
-
-        await cart.findOneAndRemove({ user: userId });
-        res.json({ response: "success" });
-      });
-    } else if (payment == "Razorpay") {
-      const newOrder = new order({
-        user: userId,
-        orderedItems: products,
-        totalPrice: totalPrice,
-        deliveryAddress: address,
-        paymentMethod: payment,
-        paymentStatus: "Pending",
-        orderStatus: "pending",
-        date: moment(Date.now()).format("DD-MM-YYYY"),
-      });
-      newOrder.save().then((details) => {
-        const orderId = details._id.toString();
-        const totalPrice = details.totalPrice;
-        instance.orders
-          .create({
-            amount: totalPrice * 100,
-            currency: "INR",
-            receipt: orderId,
-          })
-          .then((orders) => {
-            res.json({ response: true, orders: orders });
-          });
-      });
-    } else if (payment == "Wallet") {
-      const wallet = await walletModel.findOne({ user: userId });
-      const walletBalance = wallet.walletBalance;
-      if (totalPrice <= walletBalance) {
-        const remainingBalance = walletBalance - totalPrice;
+    if (address == 0) {
+      res.json({ response: "addressRequired" });
+    } else {
+      if (payment == "COD") {
         const newOrder = new order({
           user: userId,
           orderedItems: products,
           totalPrice: totalPrice,
           deliveryAddress: address,
           paymentMethod: payment,
-          paymentStatus: "Completed",
+          paymentStatus: "Pending",
           orderStatus: "Confirmed",
           date: moment(Date.now()).format("DD-MM-YYYY"),
         });
-        newOrder.save().then(async (ordered) => {
-          const orderID = ordered._id;
+        newOrder.save().then(async () => {
           products.forEach(async (data) => {
             const productID = data.products._id;
             const productQty = data.quantity;
             await inventory(productID, -productQty);
           });
-          await walletModel.findOneAndUpdate(
-            { user: userId },
-            {
-              $set: { walletBalance: remainingBalance },
-              $push: { ordered: { orderId: orderID, Amnt: totalPrice } },
-            }
+
+          await couponModel.findOneAndUpdate(
+            { couponCode: coupon },
+            { $push: { users: { user: userId } }, $inc: { couponCount: -1 } }
           );
+
           await cart.findOneAndRemove({ user: userId });
           res.json({ response: "success" });
         });
-      } else {
-        const remainingBalance = totalPrice - walletBalance;
+      } else if (payment == "Razorpay") {
         const newOrder = new order({
           user: userId,
           orderedItems: products,
           totalPrice: totalPrice,
           deliveryAddress: address,
-          paymentMethod: "wallet and Razorpay",
+          paymentMethod: payment,
           paymentStatus: "Pending",
           orderStatus: "pending",
           date: moment(Date.now()).format("DD-MM-YYYY"),
         });
         newOrder.save().then((details) => {
           const orderId = details._id.toString();
-          // const totalPrice = details.totalPrice;
+          const totalPrice = details.totalPrice;
           instance.orders
             .create({
-              amount: remainingBalance * 100,
+              amount: totalPrice * 100,
               currency: "INR",
               receipt: orderId,
             })
             .then((orders) => {
-              res.json({ response: true, orders: orders, wallet: true });
+              res.json({ response: true, orders: orders });
             });
         });
+      } else if (payment == "Wallet") {
+        const wallet = await walletModel.findOne({ user: userId });
+        const walletBalance = wallet.walletBalance;
+        if (totalPrice <= walletBalance) {
+          const remainingBalance = walletBalance - totalPrice;
+          const newOrder = new order({
+            user: userId,
+            orderedItems: products,
+            totalPrice: totalPrice,
+            deliveryAddress: address,
+            paymentMethod: payment,
+            paymentStatus: "Completed",
+            orderStatus: "Confirmed",
+            date: moment(Date.now()).format("DD-MM-YYYY"),
+          });
+          newOrder.save().then(async (ordered) => {
+            const orderID = ordered._id;
+            products.forEach(async (data) => {
+              const productID = data.products._id;
+              const productQty = data.quantity;
+              await inventory(productID, -productQty);
+            });
+            await walletModel.findOneAndUpdate(
+              { user: userId },
+              {
+                $set: { walletBalance: remainingBalance },
+                $push: { ordered: { orderId: orderID, Amnt: totalPrice } },
+              }
+            );
+            await cart.findOneAndRemove({ user: userId });
+            res.json({ response: "success" });
+          });
+        } else {
+          const remainingBalance = totalPrice - walletBalance;
+          const newOrder = new order({
+            user: userId,
+            orderedItems: products,
+            totalPrice: totalPrice,
+            deliveryAddress: address,
+            paymentMethod: "wallet and Razorpay",
+            paymentStatus: "Pending",
+            orderStatus: "pending",
+            date: moment(Date.now()).format("DD-MM-YYYY"),
+          });
+          newOrder.save().then((details) => {
+            const orderId = details._id.toString();
+            // const totalPrice = details.totalPrice;
+            instance.orders
+              .create({
+                amount: remainingBalance * 100,
+                currency: "INR",
+                receipt: orderId,
+              })
+              .then((orders) => {
+                res.json({ response: true, orders: orders, wallet: true });
+              });
+          });
+        }
       }
     }
   } catch (error) {

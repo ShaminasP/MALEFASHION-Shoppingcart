@@ -67,13 +67,14 @@
       <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
 
         <div class="product__item">
+          <a href="/productsdetails/<%=latestProduct[i]._id%> ">
           <div class="product__item__pic set-bg" data-setbg="/Images<%=latestProduct[i].Image[0].filename %> ">
             <span class="label">New</span>
-
           </div>
+          </a>
           <div class="product__item__text">
             <h6><%=  latestProduct[i].productname %> </h6>
-            <a href="#" class="add-cart">+ Add To Cart</a>
+            <a onclick="addToCart('<%=latestProduct[i]._id%>')" class="add-cart">+ Add To Cart</a>
             <div class="rating">
               <% if (latestProduct[i].rating) { %>
               <% for( let k = 0; k < latestProduct[i].rating/20; k++ ) { %>
@@ -91,10 +92,10 @@
 
             </div>
             <% if (latestProduct[i].offPrice >0) { %>
-            <del class="text-danger"><%=latestProduct [i].price%> </del>
-            <h5><%=latestProduct [i].offPrice%> </h5>
+            <del class="text-danger"><%=latestProduct[i].price%> </del>
+            <h5><%=latestProduct[i].offPrice%> </h5>
             <% } else { %>
-            <h5><%=latestProduct [i].price%> </h5>
+            <h5><%=latestProduct[i].price%> </h5>
             <% } %>
 
 
@@ -107,12 +108,14 @@
       <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
 
         <div class="product__item">
+          <a href="/productsdetails/<%=hotCollection[i]._id  %>  ">
           <div class="product__item__pic set-bg" data-setbg="/Images<%=hotCollection[i].Image[0].filename %> ">
-
           </div>
+        </a>
+
           <div class="product__item__text">
             <h6><%=hotCollection[i].productname %> </h6>
-            <a href="#" class="add-cart">+ Add To Cart</a>
+            <a onclick="addToCart('<%=hotCollection._id%>')" class="add-cart">+ Add To Cart</a>
             <div class="rating">
               <% if (hotCollection[i].rating) { %>
                 <% for( let k = 0; k < hotCollection[i].rating/20; k++ ) { %>
@@ -147,5 +150,30 @@
   </div>
 </section>
 <!-- Product Section End -->
+
+<script>
+
+function addToCart(id){
+        axios.patch('/shopping-cart',{id:id}).then((e)=>{
+        if(e.data.session==="login")location.href="/login"
+          else if(e.data.response){
+                Swal.fire({
+            icon: 'success',
+            title: 'Product is added ',
+            showConfirmButton: false,
+            timer: 1500
+            })  
+            }else{
+                Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Product Limit reached!',
+})
+            }
+            
+        })
+    }
+
+</script>
 
 <%- include ('layout/footer.ejs') %>
