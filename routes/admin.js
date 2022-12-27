@@ -40,7 +40,10 @@ const { toChangeStatus } = require("../controllers/orderController");
 
 const { upload } = require("../middleware/multer");
 
-const { adminCheck } = require("../middleware/middleware");
+const {
+  adminCheck,
+  sessionCheckAxiosAdmin,
+} = require("../middleware/middleware");
 const { Router } = require("express");
 const { uploadBanner } = require("../middleware/bannerMulter");
 const banner = require("../model/bannerModel");
@@ -136,7 +139,7 @@ router.get(
   getSalesReportBySearch
 );
 
-router.get("/chart", sessionCheckAxiosAdmin, toGetChart);
-router.get("/piechart", adminCheck, toGetPieChart);
+router.get("/chart", toGetChart);
+router.get("/piechart", toGetPieChart);
 
 module.exports = router;
