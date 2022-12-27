@@ -119,16 +119,16 @@ router.delete("/deleteproduct", adminCheck, deleteProduct);
 router.delete("/deletecategory", adminCheck, deleteCategory);
 
 //Coupon
-router.get("/coupon", viewCoupon);
+router.get("/coupon",adminCheck, viewCoupon);
 
-router.get("/addcoupon", addCoupon);
+router.get("/addcoupon",adminCheck, addCoupon);
 
-router.post("/addcoupon", toAddCoupon);
+router.post("/addcoupon",adminCheck, toAddCoupon);
 
-router.patch('/couponblock',toBlockCoupon)
+router.patch('/couponblock',adminCheck,toBlockCoupon)
 
 //SalesReports
-router.get("/salesreport", toGetSalesReport);
+router.get("/salesreport",adminCheck, toGetSalesReport);
 
 router.get("/salesreportbysearch", getSalesReportBySearch);
 
