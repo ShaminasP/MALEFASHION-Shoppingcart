@@ -233,7 +233,6 @@ const toGetSalesReport = async (req, res, next) => {
         },
       },
     ]);
-    console.log(saleReport);
     res.render("admin/salesreport", { saleReport });
   } catch (error) {
     console.log(error.message);
@@ -272,7 +271,6 @@ const getSalesReportBySearch = async (req, res, next) => {
 const toGetChart = async (req, res, next) => {
   try {
     const select = req.query.a;
-    console.log(select);
     var date = new Date();
     var month = date.getMonth();
     var year = date.getFullYear();
@@ -297,7 +295,6 @@ const toGetChart = async (req, res, next) => {
         },
         { $sort: { _id: 1 } },
       ]);
-      console.log(salesByYear);
       for (let i = 1; i <= 12; i++) {
         let result = true;
         for (let k = 0; k < salesByYear.length; k++) {
@@ -311,7 +308,6 @@ const toGetChart = async (req, res, next) => {
         }
         if (result) sales.push({ _id: i, totalPrice: 0, count: 0 });
       }
-      console.log(sales);
       var lastYear = new Date(year - 1, 0, 1);
       let salesByLastYear = await orderModel.aggregate([
         {
@@ -329,7 +325,6 @@ const toGetChart = async (req, res, next) => {
         },
         { $sort: { _id: 1 } },
       ]);
-      console.log(salesByLastYear);
 
       for (let i = 1; i <= 12; i++) {
         let result = true;
@@ -345,9 +340,7 @@ const toGetChart = async (req, res, next) => {
         if (result) PreviosSale.push({ _id: i, totalPrice: 0, count: 0 });
       }
       res.json({ sales: sales, PreviosSale: PreviosSale });
-      console.log(PreviosSale);
     } else if (select == 30) {
-      console.log("month");
       let firstDay = new Date(year, month, 1);
       firstDay = new Date(firstDay.getTime() + 1 * 24 * 60 * 60 * 1000);
       let nextWeek = new Date(firstDay.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -376,7 +369,6 @@ const toGetChart = async (req, res, next) => {
           abc.count = 0;
           sales.push(abc);
         }
-        console.log(salesByMonth);
 
         firstDay = nextWeek;
         if (i == 4) {
@@ -416,7 +408,6 @@ const toGetChart = async (req, res, next) => {
             },
           },
         ]);
-        console.log(salesByLastMonth[0]);
         if (salesByLastMonth.length) {
           PreviosSale.push(salesByLastMonth[0]);
         } else {
@@ -461,7 +452,6 @@ const toGetChart = async (req, res, next) => {
             },
           },
         ]);
-        console.log(salesByWeek);
         if (salesByWeek.length) {
           sales.push(salesByWeek[0]);
         } else {
@@ -505,8 +495,6 @@ const toGetChart = async (req, res, next) => {
       }
       res.json({ sales: sales, PreviosSale: PreviosSale });
 
-      console.log(sales);
-      console.log(PreviosSale);
     }
 
     // res.json({ status });

@@ -117,7 +117,6 @@ const viewShoppingCart = async (req, res, next) => {
       .findOne({ user: ID })
       .populate("bucket.products")
       .then((item) => {
-        console.log(item);
 
         res.render("user/shopping-cart", {
           item: item?.bucket,
@@ -314,9 +313,7 @@ const toViewUserProfile = async (req, res, next) => {
 //delete Address
 const toDeleteAddress = async (req, res, next) => {
   try {
-    console.log("something");
     const ID = req.body.id;
-    console.log(ID);
     const userID = req.session.user.id;
     await User.findOneAndUpdate(userID, {
       $pull: { address: { _id: ID } },
@@ -333,7 +330,6 @@ const toDeleteAddress = async (req, res, next) => {
 //Edit Address
 const toEditAddress = async (req, res, next) => {
   try {
-    console.log("aaaaa");
     const { name, country, address, city, state, postcode, phone } = req.body;
     const ID = req.params.id;
     const userID = req.session.user.id;
@@ -386,24 +382,19 @@ const toCouponCheck = async (req, res, next) => {
         couponCode: code,
         "users.user": userID,
       });
-      console.log("user" + usedCoupon);
       if (usedCoupon) {
         msg = "Coupoun is already used !";
         res.json({ status: false, message: msg });
       } else {
         let discount = result.discount;
         let startingDate = new Date(result.startingDate);
-        console.log(startingDate);
         let endingDate = new Date(result.EndingDate);
-        console.log(endingDate);
         const currentDate = new Date(Date.now());
         let discountLimit = result.discountLimit;
         let count = result.couponCount;
         let minAmount = result.minCartAmount;
         if (count != 0) {
-          console.log(" no count");
           if (total < minAmount) {
-            console.log("total less than min amount");
 
             msg =
               "You have to purchase minimum of" +
@@ -411,10 +402,8 @@ const toCouponCheck = async (req, res, next) => {
               "for this Coupoun ";
             res.json({ status: false, message: msg });
           } else {
-            console.log("clear");
 
             if (startingDate < currentDate && endingDate > currentDate) {
-              console.log("alll clear");
 
               let DiscAmount = Math.round((total * discount) / 100);
               if (DiscAmount > discountLimit) DiscAmount = discountLimit;

@@ -78,12 +78,6 @@
                   Cash on Delivery
                 </label>
               </div>
-              <!-- <div class="form-check">
-                <input class="form-check-input" type="radio" name="payment" id="exampleRadios2" value="Paypal">
-                <label class="form-check-label" for="exampleRadios2">
-                  Paypal
-                </label>
-              </div> -->
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="payment" id="exampleRadios3" value="Razorpay">
                 <label class="form-check-label" for="exampleRadios3">
@@ -314,7 +308,9 @@
         total
       }
     }).then((e) => {
-      if (e.data.status) {
+      if (e.data.response === "login") {
+        location.href = "/login"
+      } else if (e.data.status) {
         alert(e.data.status)
         alert(e.data.grandtotal)
         document.getElementById('couponid').innerHTML = e.data.message;
@@ -348,7 +344,9 @@
       code
     }).then((e) => {
       if (e.data) {
-        if (e.data.response === "success") {
+        if (e.data.response === "login") {
+          location.href = "/login"
+        } else if (e.data.response === "success") {
           location.href = "/orderSuccess"
         }
         const wallet = e.data.wallet
@@ -501,7 +499,7 @@
   }
 
   async function validateEdit() {
-    
+
     const name = document.getElementById('nameid').value;
     const country = document.getElementById('countryid').value;
     const add = document.getElementById('addid').value;

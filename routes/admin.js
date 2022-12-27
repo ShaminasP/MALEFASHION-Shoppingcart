@@ -17,7 +17,7 @@ const {
   getSalesReportBySearch,
   toGetChart,
   toGetPieChart,
-  toBlockCoupon
+  toBlockCoupon,
 } = require("../controllers/adminController");
 
 const { adminLogin } = require("../controllers/authController");
@@ -119,20 +119,24 @@ router.delete("/deleteproduct", adminCheck, deleteProduct);
 router.delete("/deletecategory", adminCheck, deleteCategory);
 
 //Coupon
-router.get("/coupon",adminCheck, viewCoupon);
+router.get("/coupon", adminCheck, viewCoupon);
 
-router.get("/addcoupon",adminCheck, addCoupon);
+router.get("/addcoupon", adminCheck, addCoupon);
 
-router.post("/addcoupon",adminCheck, toAddCoupon);
+router.post("/addcoupon", adminCheck, toAddCoupon);
 
-router.patch('/couponblock',adminCheck,toBlockCoupon)
+router.patch("/couponblock", adminCheck, toBlockCoupon);
 
 //SalesReports
-router.get("/salesreport",adminCheck, toGetSalesReport);
+router.get("/salesreport", adminCheck, toGetSalesReport);
 
-router.get("/salesreportbysearch", getSalesReportBySearch);
+router.get(
+  "/salesreportbysearch",
+  sessionCheckAxiosAdmin,
+  getSalesReportBySearch
+);
 
-router.get("/chart", toGetChart);
-router.get("/piechart", toGetPieChart);
+router.get("/chart", sessionCheckAxiosAdmin, toGetChart);
+router.get("/piechart", adminCheck, toGetPieChart);
 
 module.exports = router;

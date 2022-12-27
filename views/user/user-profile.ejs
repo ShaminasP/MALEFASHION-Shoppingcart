@@ -189,7 +189,6 @@
     event.preventDefault()
     const frm = new FormData(event.target)
     const form = await Object.fromEntries(frm)
-    console.log(form)
     axios.post('/addaddress', form).then(() => {
       location.href = "/viewuserprofile"
     })

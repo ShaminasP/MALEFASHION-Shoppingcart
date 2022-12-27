@@ -10,6 +10,7 @@ const { default: mongoose } = require("mongoose");
 const { resendOtp } = require("./authController");
 const { response } = require("express");
 const productModel = require("../model/productModel");
+const { findOne } = require("../model/productModel");
 
 //adding products to database
 const adminAddProduct = async (req, res, next) => {
@@ -705,15 +706,28 @@ const review = async (req, res, next) => {
     reviews.review = review;
     reviews.title = title;
     reviewModel
-      .create(reviews)
-      .then(async () => {
-        let rat = ({} = await products.findById(id, { _id: 0, rating: 1 }));
-        if (rat.rating) rating = (rating + rat.rating) / 2;
-        await products.findByIdAndUpdate(id, {
-          $inc: { review: 1 },
-          $set: { rating: rating },
-        });
-        res.json();
+      .findOneAndReplace({ product: id, user: userId }, reviews)
+      .then(async (rev) => {
+        if (rev) {
+          let rat = ({} = await products.findById(id, {
+            _id: 0,
+            rating: 1,
+            review: 1,
+          }));
+          rating = (rat.rating + rating - rev.rating) / rat.review;
+          await products.findByIdAndUpdate(id, { $set: { rating: rating } });
+          res.json();
+        } else {
+          reviewModel
+            .create(reviews)
+            .then(async () => {
+              await products.findByIdAndUpdate(id, {
+                $inc: { review: 1, rating: rating },
+              });
+              res.json();
+            })
+            .catch((error) => next(error));
+        }
       })
       .catch((error) => next(error));
   } catch (error) {
@@ -725,8 +739,6 @@ const toFilter = async (req, res, next) => {
   try {
     const categoryID = req.query.id;
     const productByCategory = await products.find({ category: categoryID });
-    console.log(productByCategory);
-
     res.json({ productByCategory });
   } catch (error) {
     next(error);

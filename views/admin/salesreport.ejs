@@ -207,7 +207,9 @@
         },
       })
       .then((e) => {
-        if (e.data) {
+        if (e.data.response == "login") {
+          location.href = "/admin/login";
+        } else if (e.data.saleReport) {
           let report = e.data.saleReport;
           console.log(report);
           let html = "";

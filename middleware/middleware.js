@@ -29,7 +29,10 @@ exports.adminCheck = (req, res, next) => {
   else res.redirect('/admin/login')
 };
 
-
+exports.sessionCheckAxiosAdmin = (req, res, next) => {
+  if (req.session.admin) next();
+  else res.json({ session: "login" });
+};
 
 
 

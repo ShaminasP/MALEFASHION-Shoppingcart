@@ -80,7 +80,8 @@
             data: {
               id: id
             }
-          }).then(() => {
+          }).then((e) => {
+            if (e.data.response === "login") location.href = "/login"
 
           })
         }
@@ -89,7 +90,8 @@
             data: {
               id: id
             }
-          }).then(() => {
+          }).then((e) => {
+            if (e.data.response === "login") location.href = "/login"
 
           })
         }

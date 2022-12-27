@@ -128,7 +128,7 @@ router.post("/postorders", sessionCheckAxios, toOrder);
 
 router.post("/paymentverify", toVerifyPayment);
 
-router.get("/orderSuccess", toOrderSuccess);
+router.get("/orderSuccess",sessionCheckAxios, toOrderSuccess);
 
 //view order
 router.get("/userorder", sessionCheck, viewUserOrder);
@@ -136,14 +136,14 @@ router.get("/userorder", sessionCheck, viewUserOrder);
 router.get("/vieworderdetails/:id", sessionCheck, userOrderDetails);
 
 //cancel
-router.delete("/cancelorder", toCancelOrder);
+router.delete("/cancelorder",sessionCheckAxios, toCancelOrder);
 
-router.delete("/returnorder", toReturnOrder);
+router.delete("/returnorder",sessionCheckAxios, toReturnOrder);
 
 //review
 router.post("/review", sessionCheckAxios, review);
 
 //coupon
-router.get("/couponcheck", toCouponCheck);
+router.get("/couponcheck",sessionCheckAxios, toCouponCheck);
 
 module.exports = router;

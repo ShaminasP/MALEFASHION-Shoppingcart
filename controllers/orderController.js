@@ -12,7 +12,6 @@ const { viewOrderDetails } = require("./adminController");
 const { inventory, refund } = require("./helpers");
 const orderModel = require("../model/orderModel");
 const walletModel = require("../model/walletModel");
-const { log } = require("console");
 
 var instance = new Razorpay({
   key_id: process.env.key_id,
@@ -232,7 +231,6 @@ const userOrderDetails = async (req, res, next) => {
       .populate("user")
       .populate("orderedItems.products")
       .then((products) => {
-        console.log(products);
         res.render("user/userOrderDetails", { products, user });
       });
   } catch (error) {
