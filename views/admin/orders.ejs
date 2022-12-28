@@ -162,7 +162,6 @@
 <script>
   function statusChange(id){
     const value=document.getElementById('change'+id).value
-    alert(value)
     axios.patch('/admin/changestatus',{id:id,value:value}).then(()=>{
 
     })

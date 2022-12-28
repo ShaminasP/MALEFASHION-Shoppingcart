@@ -12,6 +12,7 @@ require("dotenv").config();
 //setting routes
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
+const { error } = require("console");
 app.use(
   session({
     secret: "ttt",
@@ -78,14 +79,17 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 
-app.use((req,res)=>{
-res.render('user/404')
-})
- 
-app.use((err, req, res, next) => {
-  console.log(err)
-  res.render('user/404')
-})
+app.use((req, res) => {
+  if (error.code === 11000) {
+    res.json({ error: "Duplicate Found" });
+  } else if (error.name === "validation error") {
+    res.json({ error: error.message });
+  } else res.render("user/404");
+});
 
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.render("user/404");
+});
 
 app.listen(process.env.PORT);

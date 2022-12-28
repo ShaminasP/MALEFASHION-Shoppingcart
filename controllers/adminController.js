@@ -147,7 +147,7 @@ const viewCategory = async (req, res, next) => {
 //coupon
 const viewCoupon = async (req, res, next) => {
   try {
-    const coupons = await couponModel.find();
+    const coupons = await couponModel.find().catch((error) => next(error));
 
     res.render("admin/coupon", { coupons });
   } catch (error) {
@@ -184,7 +184,8 @@ const toAddCoupon = async (req, res, next) => {
       discountLimit: discountlimit,
       couponCount: coupouncount,
     });
-    newCoupon.save();
+    newCoupon.save().catch((error) => next(error));
+
     res.redirect("/admin/coupon");
   } catch (error) {
     next(error);
@@ -218,21 +219,24 @@ const toGetSalesReport = async (req, res, next) => {
     const todayDate = new Date();
     const DaysAgo = new Date(new Date().getTime() - 30 * 24 * 660 * 60 * 1000);
 
-    const saleReport = await orderModel.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: DaysAgo },
-          orderStatus: { $eq: "Delivered" },
+    const saleReport = await orderModel
+      .aggregate([
+        {
+          $match: {
+            createdAt: { $gte: DaysAgo },
+            orderStatus: { $eq: "Delivered" },
+          },
         },
-      },
-      {
-        $group: {
-          _id: { $dateToString: { format: "%d-%m-%Y", date: "$createdAt" } },
-          totalPrice: { $sum: "$totalPrice" },
-          count: { $sum: 1 },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%d-%m-%Y", date: "$createdAt" } },
+            totalPrice: { $sum: "$totalPrice" },
+            count: { $sum: 1 },
+          },
         },
-      },
-    ]);
+      ])
+      .catch((error) => next(error));
+
     res.render("admin/salesreport", { saleReport });
   } catch (error) {
     console.log(error.message);
@@ -247,21 +251,24 @@ const getSalesReportBySearch = async (req, res, next) => {
     const fromDate = new Date(req.query.fromDate);
     if (toDate <= todayDate) {
     }
-    const saleReport = await orderModel.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: fromDate, $lt: toDate },
-          orderStatus: { $eq: "Delivered" },
+    const saleReport = await orderModel
+      .aggregate([
+        {
+          $match: {
+            createdAt: { $gte: fromDate, $lt: toDate },
+            orderStatus: { $eq: "Delivered" },
+          },
         },
-      },
-      {
-        $group: {
-          _id: { $dateToString: { format: "%d-%m-%Y", date: "$createdAt" } },
-          totalPrice: { $sum: "$totalPrice" },
-          count: { $sum: 1 },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%d-%m-%Y", date: "$createdAt" } },
+            totalPrice: { $sum: "$totalPrice" },
+            count: { $sum: 1 },
+          },
         },
-      },
-    ]);
+      ])
+      .catch((error) => next(error));
+
     res.json({ status: true, saleReport });
   } catch (error) {
     next(error);
@@ -494,7 +501,6 @@ const toGetChart = async (req, res, next) => {
         );
       }
       res.json({ sales: sales, PreviosSale: PreviosSale });
-
     }
 
     // res.json({ status });
