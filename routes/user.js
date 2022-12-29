@@ -15,6 +15,7 @@ const {
   userCheckout,
   toAddAddress,
   toEditAddress,
+  toEditAddressUser,
   toViewUserProfile,
   toSelectAddress,
   toDeleteAddress,
@@ -113,6 +114,7 @@ router.post("/addaddress", sessionCheck, toAddAddress);
 
 // edit address
 router.post("/editaddress/:id", sessionCheck, toEditAddress);
+router.post("/editaddressUser/:id",sessionCheck, toEditAddressUser);
 
 //view user profile
 router.get("/viewuserprofile", sessionCheck, toViewUserProfile);

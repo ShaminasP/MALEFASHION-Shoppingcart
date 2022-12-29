@@ -356,6 +356,37 @@ const toEditAddress = async (req, res, next) => {
   }
 };
 
+
+
+const toEditAddressUser = async (req, res, next) => {
+  try {
+    const { name, country, address, city, state, postcode, phone } = req.body;
+    const ID = req.params.id;
+    const userID = req.session.user.id;
+    User.findOneAndUpdate(
+      { userID, "address._id": ID },
+      {
+        $set: {
+          "address.$.name": name,
+          "address.$.country": country,
+          "address.$.address": address,
+          "address.$.city": city,
+          "address>$.state": state,
+          "address.$.postcode": postcode,
+          "address.$.phone": phone,
+        },
+      }
+    ).then(() => {
+      res.redirect("/viewuserprofile");
+    });
+  } catch (error) {
+    next(error);
+
+    console.log(error.message);
+  }
+};
+
+
 const toOrderSuccess = (req, res, next) => {
   let user = req.session.user;
 
@@ -445,4 +476,5 @@ module.exports = {
   toEditAddress,
   toOrderSuccess,
   toCouponCheck,
+  toEditAddressUser
 };

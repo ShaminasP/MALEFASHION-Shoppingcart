@@ -115,7 +115,7 @@
 
           <div class="product__item__text">
             <h6><%=hotCollection[i].productname %> </h6>
-            <a onclick="addToCart('<%=hotCollection._id%>')" class="add-cart">+ Add To Cart</a>
+            <a onclick="addToCart('<%=hotCollection[i]._id%>')" class="add-cart">+ Add To Cart</a>
             <div class="rating">
               <% if (hotCollection[i].rating) { %>
               <% for( let k = 0; k < hotCollection[i].rating/20; k++ ) { %>
